@@ -9,21 +9,23 @@
 #define FROTZADAPTER_H_
 
 #include <QObject>
+#include <QRunnable>
 
 #include "frotz.h"
 
-class FrotzAdapter: QObject
+class FrotzAdapter: public QObject, public QRunnable
 {
 	Q_OBJECT
 
 public:
 	static FrotzAdapter * getInstance(void);
+	void run(void);
 
-	void 	os_beep (int);
-	int  	os_char_width (zchar);
-	void 	os_display_char (zchar);
-	void 	os_display_string (const zchar *);
-	void 	os_draw_picture (int, int, int);
+	void 	os_beep (int number);
+	int  	os_char_width (zchar zc);
+	void 	os_display_char (zchar zc);
+	void 	os_display_string (const zchar * zc);
+	void 	os_draw_picture (int pictureNumber, int y, int x);
 	void 	os_erase_area (int, int, int, int);
 	void 	os_fatal (const char *);
 	void 	os_finish_with_sample (int);

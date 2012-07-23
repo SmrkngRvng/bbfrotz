@@ -625,6 +625,8 @@ int  	os_string_width (const zchar *);
 void	os_init_setup (void);
 int	os_speech_output(const zchar *);
 
+int frotz_main(int argc, char * argv[]);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

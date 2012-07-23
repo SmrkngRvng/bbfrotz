@@ -58,10 +58,29 @@ void FrotzAdapter::os_beep(int number)
 }
 
 
+extern "C" {
+static char latin1_to_ascii[] =
+  "    !   c   L   >o< Y   |   S   ''  C   a   <<  not -   R   _   "
+  "^0  +/- ^2  ^3  '   my  P   .   ,   ^1  o   >>  1/4 1/2 3/4 ?   "
+  "A   A   A   A   Ae  A   AE  C   E   E   E   E   I   I   I   I   "
+  "Th  N   O   O   O   O   Oe  *   O   U   U   U   Ue  Y   Th  ss  "
+  "a   a   a   a   ae  a   ae  c   e   e   e   e   i   i   i   i   "
+  "th  n   o   o   o   o   oe  :   o   u   u   u   ue  y   th  y   "
+;
+
+}
+
+
 extern "C"
-int  	os_char_width (zchar)
+int  	os_char_width (zchar z)
 {
-	return 0;
+	if (z >= ZC_LATIN1_MIN && z <= ZC_LATIN1_MAX)
+	{
+		char *p = latin1_to_ascii + 4 * (z - ZC_LATIN1_MIN);
+		return strchr(p, ' ') - p;
+	}
+
+	return 1;
 }
 
 
@@ -90,10 +109,11 @@ void FrotzAdapter::os_display_string(const zchar * zc)
 
 
 extern "C"
-void 	os_draw_picture (int, int, int)
+void 	os_draw_picture (int pictureNumber, int y, int x)
 {
-	;
+	; // unsupported
 }
+
 
 extern "C"
 void 	os_erase_area (int, int, int, int)
@@ -140,13 +160,13 @@ void FrotzAdapter::os_init_screen(void)
 extern "C"
 void 	os_more_prompt (void)
 {
-	;
+	; // Not needed
 }
 
 extern "C"
 FILE *  os_path_open (char * filename, char * mode)
 {
-	return 0;
+	return fopen(filename, mode);
 }
 
 extern "C"
@@ -168,9 +188,9 @@ void 	os_prepare_sample (int)
 }
 
 extern "C"
-void 	os_process_arguments (int, char *[])
+void 	os_process_arguments (int argc, char * argv[])
 {
-	;
+	; // Nothing to do here
 }
 
 extern "C"
@@ -298,10 +318,19 @@ int	os_speech_output(const zchar *)
 
 QString FrotzAdapter::convert(zchar zc)
 {
-	return QString(zc);
+	char c = zc;
+	return QString::fromLatin1(&c, 1);
 }
 
 QString FrotzAdapter::convert(const zchar * zc)
 {
-	return QString("X");
+	char * c = (char *) zc;
+	return QString::fromLatin1(c, strlen(c));
+}
+
+void FrotzAdapter::run(void)
+{
+	char * argv[] = {};
+
+	frotz_main(sizeof(argv), argv);
 }
