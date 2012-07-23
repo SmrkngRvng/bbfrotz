@@ -1,4 +1,5 @@
-#include "app.hpp"
+
+#include "BBFrotz.h"
 
 #include <bb/cascades/Application>
 
@@ -6,6 +7,7 @@
 #include <QTranslator>
 
 using ::bb::cascades::Application;
+using namespace com::epeterso2::bbfrotz;
 
 int main(int argc, char **argv)
 {
@@ -20,7 +22,7 @@ int main(int argc, char **argv)
         app.installTranslator( &translator );
     }
     
-    App mainApp;
+    BBFrotz mainApp;
     
     //-- we complete the transaction started in the app constructor and start the client event loop here
     return Application::exec();
