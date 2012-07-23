@@ -3,6 +3,10 @@
  *
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct frotz_setup_struct {
 	int attribute_assignment;	/* done */
 	int attribute_testing;		/* done */
@@ -65,3 +69,7 @@ typedef struct zcode_header_struct {
 	zword hx_mouse_y;
 	zword hx_unicode_table;
 } z_header_t;
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif

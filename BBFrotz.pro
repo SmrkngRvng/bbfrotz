@@ -3,9 +3,9 @@ TARGET = BBFrotz
 
 CONFIG += qt warn_on debug_and_release cascades
 
-INCLUDEPATH += ../src              ../src/net/sourceforge/frotz     ../src/com/epeterso2/bbfrotz
-SOURCES += ../src/*.cpp            ../src/net/sourceforge/frotz/*.c ../src/com/epeterso2/bbfrotz/*.c ../src/com/epeterso2/bbfrotz/*.cpp
-HEADERS += ../src/*.hpp ../src/*.h ../src/net/sourceforge/frotz/*.h ../src/com/epeterso2/bbfrotz/*.h ../src/com/epeterso2/bbfrotz/*.hpp
+INCLUDEPATH += ../src/net/sourceforge/frotz     ../src/com/epeterso2/bbfrotz
+SOURCES +=     ../src/net/sourceforge/frotz/*.c ../src/com/epeterso2/bbfrotz/*.cpp
+HEADERS +=     ../src/net/sourceforge/frotz/*.h ../src/com/epeterso2/bbfrotz/*.h
 
 lupdate_inclusion {
     SOURCES += ../assets/*.qml

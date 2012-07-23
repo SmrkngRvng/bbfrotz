@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'app.hpp'
 **
-** Created: Mon Jul 23 05:13:45 2012
+** Created: Mon Jul 23 05:22:35 2012
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../../src/app.hpp"
+#include "../../../src/com/epeterso2/bbfrotz/app.hpp"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'app.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63
