@@ -58,6 +58,7 @@
     <!-- <authorId>ABC1234YjsnUk235h</authorId> -->
    
     <initialWindow>
+        <autoOrients>true</autoOrients>
         <systemChrome>none</systemChrome>
         <transparent>false</transparent>
     </initialWindow>
@@ -98,6 +99,8 @@
     
     <!-- Request permission to execute native code.  Required for native applications. -->
     <action system="true">run_native</action>
+    <action>access_shared</action>
+    <action>play_audio</action>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
 
     <!--  The permissions requested by your application. -->
