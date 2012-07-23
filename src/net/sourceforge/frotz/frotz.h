@@ -11,6 +11,9 @@
 
 /* #include "../config.h" */
 
+#ifndef FROTZ_H
+#define FROTZ_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -627,3 +630,5 @@ int	os_speech_output(const zchar *);
 #endif
 
 #include "setup.h"
+
+#endif /* FROTZ_H */
