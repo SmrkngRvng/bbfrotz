@@ -190,13 +190,16 @@ void 	os_prepare_sample (int)
 extern "C"
 void 	os_process_arguments (int argc, char * argv[])
 {
+	Q_UNUSED(argc);
+	Q_UNUSED(argv);
+
 	; // Nothing to do here
 }
 
 extern "C"
 int	    os_random_seed (void)
 {
-	return 0;
+	return 0; // unused
 }
 
 extern "C"
@@ -281,13 +284,13 @@ void 	os_set_text_style (int)
 extern "C"
 void 	os_start_sample (int, int, int, zword)
 {
-	;
+	; // Not supported
 }
 
 extern "C"
 void 	os_stop_sample (int)
 {
-	;
+	; // Not supported
 }
 
 extern "C"
@@ -312,7 +315,7 @@ void FrotzAdapter::os_init_setup(void)
 extern "C"
 int	os_speech_output(const zchar *)
 {
-	return 0;
+	return 0; // Not supported
 }
 
 
