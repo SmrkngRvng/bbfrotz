@@ -4,8 +4,8 @@ TARGET = BBFrotz
 CONFIG += qt warn_on debug_and_release cascades
 
 INCLUDEPATH += ../src
-SOURCES += ../src/*.cpp
-HEADERS += ../src/*.hpp ../src/*.h
+SOURCES += ../src/*.cpp ../src/frotz/*.c
+HEADERS += ../src/*.hpp ../src/*.h ../src/frotz/*.h
 
 lupdate_inclusion {
     SOURCES += ../assets/*.qml

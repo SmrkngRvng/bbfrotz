@@ -163,7 +163,7 @@ void z_piracy (void)
  *
  */
 
-int cdecl main (int argc, char *argv[])
+int cdecl frotz_main (int argc, char *argv[])
 {
 
     os_init_setup ();
