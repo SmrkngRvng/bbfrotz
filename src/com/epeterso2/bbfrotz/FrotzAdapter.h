@@ -10,6 +10,7 @@
 
 #include <QObject>
 #include <QRunnable>
+#include <QString>
 
 #include "frotz.h"
 
@@ -22,10 +23,25 @@ class FrotzAdapter: public QObject, public QRunnable
 {
 	Q_OBJECT
 
-public:
-	static FrotzAdapter * getInstance(void);
-	void run(void);
+/* QObject Properties */
 
+	Q_PROPERTY(QString storyName READ getStoryName WRITE setStoryName NOTIFY storyNameChanged)
+
+private:
+	char storyName[1024];
+
+public:
+	QString getStoryName(void);
+
+public slots:
+	void setStoryName(QString storyName);
+
+signals:
+	void storyNameChanged();
+
+/* Frotz interface */
+
+public:
 	void 	os_beep (int number);
 	int  	os_char_width (zchar zc);
 	void 	os_display_char (zchar zc);
@@ -58,8 +74,6 @@ public:
 	int  	os_string_width (const zchar *);
 	int		os_speech_output(const zchar *);
 
-public slots:
-
 signals:
 	void beep(int number);
 	void display(QString text);
@@ -68,6 +82,12 @@ signals:
 	void initSetup(void);
 	void resetScreen(void);
 	void restartGame(int code);
+
+/* Basic mechanics */
+
+public:
+	static FrotzAdapter * getInstance(void);
+	void run(void);
 
 private:
 	static FrotzAdapter * instance;

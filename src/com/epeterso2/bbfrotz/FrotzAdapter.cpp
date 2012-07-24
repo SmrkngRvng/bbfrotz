@@ -39,12 +39,32 @@ FrotzAdapter * FrotzAdapter::getInstance(void)
 	return instance;
 }
 
+// The name of the story file to load
+extern "C"
+{
+	extern char * story_name;
+}
+
 FrotzAdapter::FrotzAdapter()
 {
+	story_name = storyName;
 }
 
 FrotzAdapter::~FrotzAdapter()
 {
+	story_name = 0;
+}
+
+
+QString FrotzAdapter::getStoryName(void)
+{
+	return QString(story_name);
+}
+
+void FrotzAdapter::setStoryName(QString storyName)
+{
+	strcpy(story_name, storyName.toStdString().c_str());
+	emit storyNameChanged();
 }
 
 
