@@ -17,6 +17,8 @@ extern "C" {
 	f_setup_t f_setup;
 }
 
+using namespace com::epeterso2::bbfrotz;
+
 FrotzAdapter * FrotzAdapter::instance;
 
 FrotzAdapter * FrotzAdapter::getInstance(void)

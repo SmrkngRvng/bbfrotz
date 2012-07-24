@@ -7,6 +7,8 @@
 
 #include "BBFrotz.h"
 
+#include <QThreadPool>
+
 using namespace com::epeterso2::bbfrotz;
 
 BBFrotz::BBFrotz()

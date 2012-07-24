@@ -13,6 +13,11 @@
 
 #include "frotz.h"
 
+namespace com {
+namespace epeterso2 {
+namespace bbfrotz {
+
+
 class FrotzAdapter: public QObject, public QRunnable
 {
 	Q_OBJECT
@@ -71,5 +76,9 @@ private:
 	QString convert(zchar zc);
 	QString convert(const zchar * zc);
 };
+
+} /* namespace: bbfrotz */
+} /* namespace: epeterso2 */
+} /* namespace: com */
 
 #endif /* FROTZADAPTER_H_ */
