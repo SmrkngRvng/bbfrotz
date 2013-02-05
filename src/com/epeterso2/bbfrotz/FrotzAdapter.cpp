@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 
+#include <QDebug>
 #include <QMutex>
 
 #include "frotz.h"
@@ -19,24 +20,24 @@ extern "C" {
 
 using namespace com::epeterso2::bbfrotz;
 
-FrotzAdapter * FrotzAdapter::instance;
+FrotzAdapter * FrotzAdapter::_instance = 0;
 
-FrotzAdapter * FrotzAdapter::getInstance(void)
+FrotzAdapter * FrotzAdapter::instance(void)
 {
-	if (! instance)
+	if (! _instance)
 	{
 		static QMutex monitor;
 		monitor.lock();
 
-		if (! instance)
+		if (! _instance)
 		{
-			instance = new FrotzAdapter();
+			_instance = new FrotzAdapter();
 		}
 
 		monitor.unlock();
 	}
 
-	return instance;
+	return _instance;
 }
 
 // The name of the story file to load
@@ -47,23 +48,34 @@ extern "C"
 
 FrotzAdapter::FrotzAdapter()
 {
-	story_name = storyName;
 }
 
 FrotzAdapter::~FrotzAdapter()
 {
-	story_name = 0;
 }
 
 
-QString FrotzAdapter::getStoryName(void)
+QString FrotzAdapter::storyName(void)
 {
-	return QString(story_name);
+	return _storyName;
 }
 
 void FrotzAdapter::setStoryName(QString storyName)
 {
-	strcpy(story_name, storyName.toStdString().c_str());
+	_storyName = storyName;
+
+	if (story_name)
+	{
+		free(story_name);
+
+		story_name = (char *) malloc(_storyName.length() + 1);
+
+		if (story_name == 0)
+		{
+			os_fatal("malloc failed for story_name");
+		}
+	}
+
 	emit storyNameChanged();
 }
 
@@ -71,7 +83,7 @@ void FrotzAdapter::setStoryName(QString storyName)
 extern "C"
 void 	os_beep (int number)
 {
-	FrotzAdapter::getInstance()->os_beep(number);
+	FrotzAdapter::instance()->os_beep(number);
 }
 
 void FrotzAdapter::os_beep(int number)
@@ -80,28 +92,14 @@ void FrotzAdapter::os_beep(int number)
 }
 
 
-extern "C" {
-static char latin1_to_ascii[] =
-  "    !   c   L   >o< Y   |   S   ''  C   a   <<  not -   R   _   "
-  "^0  +/- ^2  ^3  '   my  P   .   ,   ^1  o   >>  1/4 1/2 3/4 ?   "
-  "A   A   A   A   Ae  A   AE  C   E   E   E   E   I   I   I   I   "
-  "Th  N   O   O   O   O   Oe  *   O   U   U   U   Ue  Y   Th  ss  "
-  "a   a   a   a   ae  a   ae  c   e   e   e   e   i   i   i   i   "
-  "th  n   o   o   o   o   oe  :   o   u   u   u   ue  y   th  y   "
-;
-
-}
-
-
 extern "C"
 int  	os_char_width (zchar z)
 {
-	if (z >= ZC_LATIN1_MIN && z <= ZC_LATIN1_MAX)
-	{
-		char *p = latin1_to_ascii + 4 * (z - ZC_LATIN1_MIN);
-		return strchr(p, ' ') - p;
-	}
+	FrotzAdapter::instance()->os_char_width(z);
+}
 
+int FrotzAdapter::os_char_width(zchar z)
+{
 	return 1;
 }
 
@@ -109,24 +107,24 @@ int  	os_char_width (zchar z)
 extern "C"
 void 	os_display_char (zchar zc)
 {
-	FrotzAdapter::getInstance()->os_display_char(zc);
+	FrotzAdapter::instance()->os_display_char(zc);
 }
 
 void FrotzAdapter::os_display_char(zchar zc)
 {
-	emit display(convert(zc));
+	;
 }
 
 
 extern "C"
 void 	os_display_string (const zchar * zc)
 {
-	FrotzAdapter::getInstance()->os_display_string(zc);
+	FrotzAdapter::instance()->os_display_string(zc);
 }
 
 void FrotzAdapter::os_display_string(const zchar * zc)
 {
-	emit display(convert(zc));
+	;
 }
 
 
@@ -147,7 +145,7 @@ void 	os_erase_area (int, int, int, int)
 extern "C"
 void 	os_fatal (const char * message)
 {
-	FrotzAdapter::getInstance()->os_fatal(message);
+	FrotzAdapter::instance()->os_fatal(message);
 }
 
 void FrotzAdapter::os_fatal(const char * message)
@@ -171,7 +169,7 @@ int  	os_font_data (int, int *, int *)
 extern "C"
 void 	os_init_screen (void)
 {
-	FrotzAdapter::getInstance()->os_init_screen();
+	FrotzAdapter::instance()->os_init_screen();
 }
 
 void FrotzAdapter::os_init_screen(void)
@@ -252,7 +250,7 @@ zword   os_read_mouse(void)
 extern "C"
 void 	os_reset_screen (void)
 {
-	FrotzAdapter::getInstance()->os_reset_screen();
+	FrotzAdapter::instance()->os_reset_screen();
 }
 
 void FrotzAdapter::os_reset_screen(void)
@@ -264,7 +262,7 @@ void FrotzAdapter::os_reset_screen(void)
 extern "C"
 void 	os_restart_game (int code)
 {
-	FrotzAdapter::getInstance()->os_restart_game(code);
+	FrotzAdapter::instance()->os_restart_game(code);
 }
 
 void FrotzAdapter::os_restart_game(int code)
@@ -325,7 +323,7 @@ int  	os_string_width (const zchar *)
 extern "C"
 void	os_init_setup (void)
 {
-	FrotzAdapter::getInstance()->os_init_setup();
+	FrotzAdapter::instance()->os_init_setup();
 }
 
 void FrotzAdapter::os_init_setup(void)
@@ -341,21 +339,11 @@ int	os_speech_output(const zchar *)
 }
 
 
-QString FrotzAdapter::convert(zchar zc)
-{
-	char c = zc;
-	return QString::fromLatin1(&c, 1);
-}
-
-QString FrotzAdapter::convert(const zchar * zc)
-{
-	char * c = (char *) zc;
-	return QString::fromLatin1(c, strlen(c));
-}
-
 void FrotzAdapter::run(void)
 {
 	char * argv[] = {};
 
+	emit mainStarted();
 	frotz_main(sizeof(argv), argv);
+	emit mainEnded();
 }

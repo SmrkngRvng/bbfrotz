@@ -25,19 +25,19 @@ class FrotzAdapter: public QObject, public QRunnable
 
 /* QObject Properties */
 
-	Q_PROPERTY(QString storyName READ getStoryName WRITE setStoryName NOTIFY storyNameChanged)
-
-private:
-	char storyName[1024];
+	Q_PROPERTY(QString storyName READ storyName WRITE setStoryName NOTIFY storyNameChanged)
 
 public:
-	QString getStoryName(void);
+	QString storyName(void);
 
 public slots:
 	void setStoryName(QString storyName);
 
 signals:
 	void storyNameChanged();
+
+protected:
+	QString _storyName;
 
 /* Frotz interface */
 
@@ -80,21 +80,22 @@ signals:
 	void fatal(QString message);
 	void initScreen(void);
 	void initSetup(void);
+	void mainEnded(void);
+	void mainStarted(void);
+	void morePrompt(void);
 	void resetScreen(void);
 	void restartGame(int code);
 
 /* Basic mechanics */
 
 public:
-	static FrotzAdapter * getInstance(void);
+	static FrotzAdapter * instance(void);
 	void run(void);
 
 private:
-	static FrotzAdapter * instance;
+	static FrotzAdapter * _instance;
 	FrotzAdapter();
 	virtual ~FrotzAdapter();
-	QString convert(zchar zc);
-	QString convert(const zchar * zc);
 };
 
 } /* namespace: bbfrotz */
